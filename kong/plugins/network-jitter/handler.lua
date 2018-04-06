@@ -4,7 +4,7 @@ local access = require "kong.plugins.network-jitter.access"
 local NetWorkJitterHandler = BasePlugin:extend()
 
 function NetWorkJitterHandler:new()
-  NetWorkJitterHandler.super.new(self, "request-transformer")
+  NetWorkJitterHandler.super.new(self, "network-jitter")
 end
 
 function NetWorkJitterHandler:access(conf)
