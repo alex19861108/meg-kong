@@ -283,5 +283,8 @@ build = {
 
     ["kong.plugins.request-termination.handler"] = "kong/plugins/request-termination/handler.lua",
     ["kong.plugins.request-termination.schema"] = "kong/plugins/request-termination/schema.lua",
+
+    ["kong.plugins.network-jitter.handler"] = "kong/plugins/network-jitter/handler.lua",
+    ["kong.plugins.network-jitter.schema"] = "kong/plugins/network-jitter/schema.lua",
   }
 }
