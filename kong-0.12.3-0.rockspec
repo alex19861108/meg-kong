@@ -286,5 +286,6 @@ build = {
 
     ["kong.plugins.network-jitter.handler"] = "kong/plugins/network-jitter/handler.lua",
     ["kong.plugins.network-jitter.schema"] = "kong/plugins/network-jitter/schema.lua",
+    ["kong.plugins.network-jitter.access"] = "kong/plugins/network-jitter/access.lua",
   }
 }
