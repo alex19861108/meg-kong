@@ -22,39 +22,35 @@ local responses = require "kong.tools.responses"
 local _M = {}
 
 function _M.execute(conf)
-  local jitter_rate = conf.jitter_rate
   math.randomseed(os.time())
   math.random()
-  if math.random() < jitter_rate then
-
-    --local ok, err
-    --local parsed_url = parse_url(conf.http_endpoint)
-    --local host = parsed_url.host
-    --local port = tonumber(parsed_url.port)
-    --
-    --local sock = ngx.socket.tcp()
-    --sock:settimeout(conf.timeout)
-    --
-    --ok, err = sock:connect(host, port)
-    --if not ok then
-    --  ngx.log(ngx.ERR, name .. "failed to connect to " .. host .. ":" .. tostring(port) .. ": ", err)
-    --  return responses.send(ngx.HTTP_REQUEST_TIMEOUT, err)
-    --end
-    --
-    --if parsed_url.scheme == HTTPS then
-    --  local _, err = sock:sslhandshake(true, host, false)
-    --  if err then
-    --    ngx.log(ngx.ERR, name .. "failed to do SSL handshake with " .. host .. ":" .. tostring(port) .. ": ", err)
-    --  end
-    --end
-    --
-    --ok, err = sock:send(generate_post_payload(conf.method, conf.content_type, parsed_url, body))
-    --if not ok then
-    --  ngx.log(ngx.ERR, name .. "failed to send data to " .. host .. ":" .. tostring(port) .. ": ", err)
-    --end
+  if math.random() < conf.connect_timeout_rate then
     ngx.ctx.balancer_address.connect_timeout = 1
+  end
+  if math.random() < conf.send_timeout_rate then
     ngx.ctx.balancer_address.send_timeout = 1
+  end
+  if math.random() < conf.read_timeout_rate then
     ngx.ctx.balancer_address.read_timeout = 1
+  end
+  if math.random() < conf.upstream_disconnect_rate then
+    ngx.exit()
+  end
+  if math.random() < conf.request_termination.request_termination_rate then
+    local status_code = conf.request_termination.status_code
+    local content_type = conf.request_termination.content_type
+    local body = conf.request_termination.body
+
+    ngx.status = status_code
+    if not content_type then
+      content_type = "application/json; charset=utf-8";
+    end
+    ngx.header["Content-Type"] = content_type
+    ngx.header["Server"] = server_header
+
+    ngx.say(body)
+
+    return ngx.exit(status_code)
   end
 end
 
