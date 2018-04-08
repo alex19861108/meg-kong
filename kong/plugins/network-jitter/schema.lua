@@ -5,7 +5,7 @@ return {
       type = "table",
       schema = {
         fields = {
-          rate = {type = "string", default = 0 },
+          rate = {type = "string", default = '0' },
         }
       }
     },
@@ -13,7 +13,7 @@ return {
       type = "table",
       schema = {
         fields = {
-          rate = {type = "string", default = 0 },
+          rate = {type = "string", default = '0' },
         }
       }
     },
@@ -21,7 +21,7 @@ return {
       type = "table",
       schema = {
         fields = {
-          rate = {type = "string", default = 0 },
+          rate = {type = "string", default = '0' },
         }
       }
     },
@@ -29,7 +29,7 @@ return {
       type = "table",
       schema = {
         fields = {
-          rate = {type = "string", default = 0 },
+          rate = {type = "string", default = '0' },
         }
       }
     },
@@ -37,7 +37,7 @@ return {
       type = "table",
       schema = {
         fields = {
-          rate = {type = "string", default = 0},
+          rate = {type = "string", default = '0'},
           status_code = { type = "number", default = 503 },
           content_type = { type = "string" },
           body = { type = "string" },
