@@ -24,40 +24,41 @@ local _M = {}
 function _M.execute(conf)
   math.randomseed(os.time())
   math.random()
-  ngx.log(ngx.ERR, "===========")
-  ngx.log(ngx.ERR, conf.connect_timeout.rate)
-  ngx.log(ngx.ERR, "===========")
   if conf.connect_timeout and math.random() < conf.connect_timeout.rate then
     ngx.log(ngx.ERR, "**************")
     ngx.ctx.balancer_address.connect_timeout = 1
-    ngx.ctx.balancer_address.send_timeout = 1
-    ngx.ctx.balancer_address.read_timeout = 1
+    ngx.log(ngx.ERR, "**************")
   end
-  --if conf.send_timeout and math.random() < conf.send_timeout.rate then
-  --  ngx.ctx.balancer_address.send_timeout = 1
-  --end
-  --if conf.read_timeout and math.random() < conf.read_timeout.rate then
-  --  ngx.ctx.balancer_address.read_timeout = 1
-  --end
-  --if conf.upstream_disconnect and math.random() < conf.upstream_disconnect.rate then
-  --  ngx.exit()
-  --end
-  --if conf.request_termination and math.random() < conf.request_termination.rate then
-  --  local status_code = conf.request_termination.status_code
-  --  local content_type = conf.request_termination.content_type
-  --  local body = conf.request_termination.body
-  --
-  --  ngx.status = status_code
-  --  if not content_type then
-  --    content_type = "application/json; charset=utf-8";
-  --  end
-  --  ngx.header["Content-Type"] = content_type
-  --  ngx.header["Server"] = server_header
-  --
-  --  ngx.say(body)
-  --
-  --  return ngx.exit(status_code)
-  --end
+  if conf.send_timeout and math.random() < conf.send_timeout.rate then
+    ngx.log(ngx.ERR, "++++++++++++++")
+    ngx.ctx.balancer_address.send_timeout = 1
+    ngx.log(ngx.ERR, "++++++++++++++")
+  end
+  if conf.read_timeout and math.random() < conf.read_timeout.rate then
+    ngx.log(ngx.ERR, "--------------")
+    ngx.ctx.balancer_address.read_timeout = 1
+    ngx.log(ngx.ERR, "--------------")
+  end
+  if conf.upstream_disconnect and math.random() < conf.upstream_disconnect.rate then
+    ngx.log(ngx.ERR, "##############")
+    ngx.exit(ngx.HTTP_CLOSE)
+  end
+  if conf.request_termination and math.random() < conf.request_termination.rate then
+    local status_code = conf.request_termination.status_code
+    local content_type = conf.request_termination.content_type
+    local body = conf.request_termination.body
+
+    ngx.status = status_code
+    if not content_type then
+      content_type = "application/json; charset=utf-8";
+    end
+    ngx.header["Content-Type"] = content_type
+    ngx.header["Server"] = server_header
+
+    ngx.say(body)
+
+    return ngx.exit(status_code)
+  end
 end
 
 return _M
