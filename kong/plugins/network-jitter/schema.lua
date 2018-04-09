@@ -46,11 +46,11 @@ return {
     --},
   },
   self_check = function(schema, plugin_t, dao, is_update)
-    if plugin_t.connect_timeout then
-      if plugin_t.connect_timeout.rate < 0 or plugin_t.connect_timeout.rate > 1 then
-        return false, Errors.schema("connect_timeout_rate must be between 0 .. 1")
-      end
-    end
+    --if plugin_t.connect_timeout then
+    --  if plugin_t.connect_timeout.rate < 0 or plugin_t.connect_timeout.rate > 1 then
+    --    return false, Errors.schema("connect_timeout_rate must be between 0 .. 1")
+    --  end
+    --end
     --if plugin_t.send_timeout then
     --  if plugin_t.send_timeout.rate < 0 or plugin_t.send_timeout.rate > 1 then
     --    return false, Errors.schema("send_timeout_rate must be between 0 .. 1")

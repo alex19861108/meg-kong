@@ -24,9 +24,9 @@ local _M = {}
 function _M.execute(conf)
   math.randomseed(os.time())
   math.random()
-  if conf.connect_timeout and math.random() < conf.connect_timeout.rate then
-    ngx.ctx.balancer_address.connect_timeout = 1
-  end
+  --if conf.connect_timeout and math.random() < conf.connect_timeout.rate then
+  --  ngx.ctx.balancer_address.connect_timeout = 1
+  --end
   --if conf.send_timeout and math.random() < conf.send_timeout.rate then
   --  ngx.ctx.balancer_address.send_timeout = 1
   --end
