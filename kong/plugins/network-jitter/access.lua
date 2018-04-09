@@ -26,10 +26,9 @@ function _M.execute(conf)
   math.random()
   ngx.log(ngx.ERR, "===========")
   ngx.log(ngx.ERR, conf.connect_timeout.rate)
-  ngx.log(ngx.ERR, math.random())
-  ngx.log(ngx.ERR, math.random() < conf.connect_timeout.rate )
   ngx.log(ngx.ERR, "===========")
   if conf.connect_timeout and math.random() < conf.connect_timeout.rate then
+    ngx.log(ngx.ERR, "**************")
     ngx.ctx.balancer_address.connect_timeout = 1
   end
   --if conf.send_timeout and math.random() < conf.send_timeout.rate then
