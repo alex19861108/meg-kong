@@ -36,22 +36,22 @@ function _M.execute(conf)
   if conf.upstream_disconnect and math.random() < conf.upstream_disconnect.rate then
     ngx.exit()
   end
-  if conf.request_termination and math.random() < conf.request_termination.rate then
-    local status_code = conf.request_termination.status_code
-    local content_type = conf.request_termination.content_type
-    local body = conf.request_termination.body
-
-    ngx.status = status_code
-    if not content_type then
-      content_type = "application/json; charset=utf-8";
-    end
-    ngx.header["Content-Type"] = content_type
-    ngx.header["Server"] = server_header
-
-    ngx.say(body)
-
-    return ngx.exit(status_code)
-  end
+  --if conf.request_termination and math.random() < conf.request_termination.rate then
+  --  local status_code = conf.request_termination.status_code
+  --  local content_type = conf.request_termination.content_type
+  --  local body = conf.request_termination.body
+  --
+  --  ngx.status = status_code
+  --  if not content_type then
+  --    content_type = "application/json; charset=utf-8";
+  --  end
+  --  ngx.header["Content-Type"] = content_type
+  --  ngx.header["Server"] = server_header
+  --
+  --  ngx.say(body)
+  --
+  --  return ngx.exit(status_code)
+  --end
 end
 
 return _M

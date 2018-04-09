@@ -33,17 +33,17 @@ return {
         }
       }
     },
-    request_termination = {
-      type = "table",
-      schema = {
-        fields = {
-          rate = {type = "number", default = 0 },
-          status_code = { type = "number", default = 503 },
-          content_type = { type = "string" },
-          body = { type = "string" },
-        }
-      }
-    },
+    --request_termination = {
+    --  type = "table",
+    --  schema = {
+    --    fields = {
+    --      rate = { type = "number", default = 0 },
+    --      status_code = { type = "number", default = 503 },
+    --      content_type = { type = "string" },
+    --      body = { type = "string" },
+    --    }
+    --  }
+    --},
   },
   self_check = function(schema, plugin_t, dao, is_update)
     if plugin_t.connect_timeout then
@@ -66,11 +66,11 @@ return {
         return false, Errors.schema("upstream_disconnect_rate must be between 0 .. 1")
       end
     end
-    if plugin_t.request_termination then
-      if plugin_t.request_termination.rate < 0 or plugin_t.request_termination.rate > 1 then
-        return false, Errors.schema("request_termination_rate must be between 0 .. 1")
-      end
-    end
+    --if plugin_t.request_termination then
+    --  if plugin_t.request_termination.rate < 0 or plugin_t.request_termination.rate > 1 then
+    --    return false, Errors.schema("request_termination_rate must be between 0 .. 1")
+    --  end
+    --end
 
     return true
   end
