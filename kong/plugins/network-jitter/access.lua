@@ -24,23 +24,19 @@ local _M = {}
 function _M.execute(conf)
   math.randomseed(os.time())
   math.random()
-  ng.log("=========")
-  ngx.log(conf.connect_timeout.rate)
-  ngx.log(conf.send_timeout.rate)
-  ngx.log("=========")
-  if conf.connect_timeout and math.random() < tonumber(conf.connect_timeout.rate) then
+  if conf.connect_timeout and math.random() < conf.connect_timeout.rate then
     ngx.ctx.balancer_address.connect_timeout = 1
   end
-  if conf.send_timeout and math.random() < tonumber(conf.send_timeout.rate) then
+  if conf.send_timeout and math.random() < conf.send_timeout.rate then
     ngx.ctx.balancer_address.send_timeout = 1
   end
-  if conf.read_timeout and math.random() < tonumber(conf.read_timeout.rate) then
+  if conf.read_timeout and math.random() < conf.read_timeout.rate then
     ngx.ctx.balancer_address.read_timeout = 1
   end
-  if conf.upstream_disconnect and math.random() < tonumber(conf.upstream_disconnect.rate) then
+  if conf.upstream_disconnect and math.random() < conf.upstream_disconnect.rate then
     ngx.exit()
   end
-  if conf.request_termination and math.random() < tonumber(conf.request_termination.rate) then
+  if conf.request_termination and math.random() < conf.request_termination.rate then
     local status_code = conf.request_termination.status_code
     local content_type = conf.request_termination.content_type
     local body = conf.request_termination.body
