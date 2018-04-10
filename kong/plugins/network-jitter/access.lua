@@ -1,5 +1,8 @@
 local multipart = require "multipart"
 local cjson = require "cjson"
+local responses = require "kong.tools.responses"
+local url = require "socket.url"
+local str = require "kong.plugins.network-jitter.stringutil"
 
 local table_insert = table.insert
 local req_set_uri_args = ngx.req.set_uri_args
@@ -17,7 +20,20 @@ local type = type
 local string_find = string.find
 local pcall = pcall
 
-local responses = require "kong.tools.responses"
+local function parse_url(host_url)
+  local parsed_url = url.parse(host_url)
+  if not parsed_url.port then
+    if parsed_url.scheme == "http" then
+      parsed_url.port = 80
+    elseif parsed_url.scheme == HTTPS then
+      parsed_url.port = 443
+    end
+  end
+  if not parsed_url.path then
+    parsed_url.path = "/"
+  end
+  return parsed_url
+end
 
 local _M = {}
 
@@ -39,6 +55,22 @@ function _M.execute(conf)
     ngx.ctx.balancer_address.read_timeout = 1
     ngx.log(ngx.ERR, "--------------")
   end
+  --if conf.random_port then
+  --  ngx.log(ngx.ERR, "$$$$$$$$$$$$$$")
+  --  ngx.log(ngx.ERR, math.random(1000,10000))
+  --  ngx.log(ngx.ERR, ngx.var.remote_port)
+  --  local parsed_url = parse_url(ngx.var.request_uri)
+  --  parsed_url.port = math.random(1000,10000)
+  --  ngx.req.set = parsed_url.port
+  --end
+  --if conf.random_host then
+  --  ngx.log(ngx.ERR, "$$$$$$$$$$$$$$")
+  --  ngx.log(ngx.ERR, str.random(20))
+  --  ngx.log(ngx.ERR, ngx.var.request_uri)
+  --  local parsed_url = parse_url(ngx.var.request_uri)
+  --  parsed_url.host = "www." .. str.random(20) .. ".com"
+  --  --ngx.var.request_uri = url.build(parsed_url)
+  --end
   if conf.upstream_disconnect and math.random() < conf.upstream_disconnect.rate then
     ngx.log(ngx.ERR, "##############")
     ngx.exit(ngx.HTTP_CLOSE)

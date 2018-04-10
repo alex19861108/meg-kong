@@ -45,6 +45,8 @@ return {
         }
       }
     },
+    --random_port = { default = false, type = "boolean" },
+    --random_host = { default = false, type = "boolean" },
   },
 
   self_check = function(schema, plugin_t, dao, is_updating)
