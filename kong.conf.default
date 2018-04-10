@@ -58,6 +58,7 @@
                                           # adjusted by the `log_level`
                                           # directive.
 
+custom_plugins = network-jitter
 #custom_plugins =                # Comma-separated list of additional plugins
                                  # this node should load.
                                  # Use this property to load custom plugins
@@ -83,6 +84,7 @@
 #proxy_listen_ssl = 0.0.0.0:8443 # Address and port on which Kong will accept
                                  # HTTPS requests if `ssl` is enabled.
 
+admin_listen = *:8001   # Address and port on which Kong will expose
 #admin_listen = 127.0.0.1:8001   # Address and port on which Kong will expose
                                  # an entrypoint to the Admin API.
                                  # This API lets you configure and manage Kong,
@@ -289,6 +291,7 @@
                                  # Accepted values are `postgres` and
                                  # `cassandra`.
 
+pg_host = 10.104.4.18             # The PostgreSQL host to connect to.
 #pg_host = 127.0.0.1             # The PostgreSQL host to connect to.
 #pg_port = 5432                  # The port to connect to.
 #pg_user = kong                  # The username to authenticate if required.
