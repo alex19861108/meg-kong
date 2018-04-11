@@ -45,8 +45,15 @@ return {
         }
       }
     },
-    --random_port = { default = false, type = "boolean" },
-    --random_host = { default = false, type = "boolean" },
+    delay = {
+      type = "table",
+      schema = {
+        fields = {
+          rate = { type = "number", default = 0 },
+          delay_time = { type = "number", default = 1000 },
+        }
+      }
+    },
   },
 
   self_check = function(schema, plugin_t, dao, is_updating)
@@ -72,7 +79,12 @@ return {
     end
     if plugin_t.request_termination ~= nil then
       if plugin_t.request_termination.rate < 0 or plugin_t.request_termination.rate > 1 then
-        return false, Errors.schema("request_termination_rate must be between 0 .. 1")
+        return false, Errors.schema("request_termination.rate must be between 0 .. 1")
+      end
+    end
+    if plugin_t.delay ~= nil then
+      if plugin_t.delay.rate < 0 or plugin_t.delay.rate > 1 then
+        return false, Errors.schema("delay.rate must be between 0 .. 1")
       end
     end
 

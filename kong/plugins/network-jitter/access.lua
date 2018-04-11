@@ -1,8 +1,7 @@
 local multipart = require "multipart"
 local cjson = require "cjson"
+local socket = require "socket"
 local responses = require "kong.tools.responses"
-local url = require "socket.url"
-local str = require "kong.plugins.network-jitter.stringutil"
 
 local table_insert = table.insert
 local req_set_uri_args = ngx.req.set_uri_args
@@ -21,7 +20,7 @@ local string_find = string.find
 local pcall = pcall
 
 local function parse_url(host_url)
-  local parsed_url = url.parse(host_url)
+  local parsed_url = socket.url.parse(host_url)
   if not parsed_url.port then
     if parsed_url.scheme == "http" then
       parsed_url.port = 80
@@ -35,44 +34,31 @@ local function parse_url(host_url)
   return parsed_url
 end
 
+function sleep(n)
+  local timeout = math.ceil(n / 1000)
+  local t0 = socket.gettime()
+  while socket.gettime() - t0 <= timeout do
+  end
+end
+
 local _M = {}
 
 function _M.execute(conf)
   math.randomseed(os.time())
   math.random()
   if conf.connect_timeout and math.random() < conf.connect_timeout.rate then
-    ngx.log(ngx.ERR, "**************")
     ngx.ctx.balancer_address.connect_timeout = 1
-    ngx.log(ngx.ERR, "**************")
   end
   if conf.send_timeout and math.random() < conf.send_timeout.rate then
-    ngx.log(ngx.ERR, "++++++++++++++")
     ngx.ctx.balancer_address.send_timeout = 1
-    ngx.log(ngx.ERR, "++++++++++++++")
   end
   if conf.read_timeout and math.random() < conf.read_timeout.rate then
-    ngx.log(ngx.ERR, "--------------")
     ngx.ctx.balancer_address.read_timeout = 1
-    ngx.log(ngx.ERR, "--------------")
   end
-  --if conf.random_port then
-  --  ngx.log(ngx.ERR, "$$$$$$$$$$$$$$")
-  --  ngx.log(ngx.ERR, math.random(1000,10000))
-  --  ngx.log(ngx.ERR, ngx.var.remote_port)
-  --  local parsed_url = parse_url(ngx.var.request_uri)
-  --  parsed_url.port = math.random(1000,10000)
-  --  ngx.req.set = parsed_url.port
-  --end
-  --if conf.random_host then
-  --  ngx.log(ngx.ERR, "$$$$$$$$$$$$$$")
-  --  ngx.log(ngx.ERR, str.random(20))
-  --  ngx.log(ngx.ERR, ngx.var.request_uri)
-  --  local parsed_url = parse_url(ngx.var.request_uri)
-  --  parsed_url.host = "www." .. str.random(20) .. ".com"
-  --  --ngx.var.request_uri = url.build(parsed_url)
-  --end
+  if conf.delay and math.random() < conf.delay.rate then
+    sleep(conf.delay.delay_time)
+  end
   if conf.upstream_disconnect and math.random() < conf.upstream_disconnect.rate then
-    ngx.log(ngx.ERR, "##############")
     ngx.exit(ngx.HTTP_CLOSE)
   end
   if conf.request_termination and math.random() < conf.request_termination.rate then
