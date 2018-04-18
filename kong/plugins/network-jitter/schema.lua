@@ -54,6 +54,15 @@ return {
         }
       }
     },
+    replace = {
+      type = "table",
+      schema = {
+        fields = {
+          rate = { type = "number", default = 0 },
+          json = { type = "string", default = "" },
+        }
+      }
+    },
   },
 
   self_check = function(schema, plugin_t, dao, is_updating)
