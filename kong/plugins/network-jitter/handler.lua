@@ -1,5 +1,6 @@
 local BasePlugin = require "kong.plugins.base_plugin"
 local access = require "kong.plugins.network-jitter.access"
+local header_filter = require "kong.plugins.network-jitter.header_filter"
 local body_filter = require "kong.plugins.network-jitter.body_filter"
 
 local NetWorkJitterHandler = BasePlugin:extend()
@@ -17,19 +18,24 @@ function NetWorkJitterHandler:access(conf)
   ctx.rt_body_chunk_number = 1
 end
 
+function NetWorkJitterHandler:header_filter(conf)
+  NetWorkJitterHandler.super.header_filter(self)
+  header_filter.transform_headers(conf, ngx.header)
+end
+
 function NetWorkJitterHandler:body_filter(conf)
   NetWorkJitterHandler.super.body_filter(self)
 
-  if body_filter.is_json_body(ngx.header["content-type"]) then
+  if header_filter.is_body_transform_set(conf) and header_filter.is_json_body(ngx.header["content-type"]) then
     local ctx = ngx.ctx
     local chunk, eof = ngx.arg[1], ngx.arg[2]
     if eof then
-      local body = body_filter.execute(conf, table.concat(ctx.rt_body_chunks))
+      local body = body_filter.transform_json_body(conf, table.concat(ctx.rt_body_chunks))
       ngx.arg[1] = body
     else
       ctx.rt_body_chunks[ctx.rt_body_chunk_number] = chunk
       ctx.rt_body_chunk_number = ctx.rt_body_chunk_number + 1
-      ngx.arg[1] = "\n"
+      ngx.arg[1] = nil
     end
   end
 end

@@ -11,7 +11,7 @@ function _M.is_json_body(content_type)
   return content_type and string.find(string.lower(content_type), "application/json", nil, true)
 end
 
-function _M.execute(conf, buffered_data)
+function _M.transform_json_body(conf, buffered_data)
   math.randomseed(os.time())
   math.random()
 
