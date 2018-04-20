@@ -46,26 +46,32 @@ function _M.execute(conf)
   math.randomseed(os.time())
   math.random()
   if conf.connect_timeout and math.random() < conf.connect_timeout.rate then
+    ngx.log(ngx.ERR, "mock connect timeout")
     ngx.ctx.balancer_address.connect_timeout = 1
   end
 
   if conf.send_timeout and math.random() < conf.send_timeout.rate then
+    ngx.log(ngx.ERR, "mock send timeout")
     ngx.ctx.balancer_address.send_timeout = 1
   end
 
   if conf.read_timeout and math.random() < conf.read_timeout.rate then
+    ngx.log(ngx.ERR, "mock read timeout")
     ngx.ctx.balancer_address.read_timeout = 1
   end
 
   if conf.delay and math.random() < conf.delay.rate then
+    ngx.log(ngx.ERR, "mock delay")
     sleep(conf.delay.delay_time)
   end
 
   if conf.upstream_disconnect and math.random() < conf.upstream_disconnect.rate then
+    ngx.log(ngx.ERR, "mock upstream disconnect")
     ngx.exit(ngx.HTTP_CLOSE)
   end
 
   if conf.request_termination and math.random() < conf.request_termination.rate then
+    ngx.log(ngx.ERR, "mock request termination")
     local status_code = conf.request_termination.status_code
     local content_type = conf.request_termination.content_type
     local body = conf.request_termination.body

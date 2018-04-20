@@ -16,6 +16,7 @@ function _M.transform_json_body(conf, buffered_data)
   math.random()
 
   if conf.replace and math.random() <= conf.replace.rate then
+    ngx.log(ngx.ERR, "mock replace")
     if _M.is_json_body(ngx.header["content-type"]) then
       local status, json_body = pcall(cjson.decode, buffered_data);
       if status == false or json_body == nil then
