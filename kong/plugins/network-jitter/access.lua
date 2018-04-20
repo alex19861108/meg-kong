@@ -61,7 +61,7 @@ function _M.execute(conf)
   end
 
   if conf.delay and math.random() <= conf.delay.rate then
-    ngx.log(ngx.ERR, "mock delay")
+    ngx.log(ngx.ERR, "mock delay: " .. tostring(conf.delay.delay_time))
     sleep(conf.delay.delay_time)
   end
 
