@@ -52,6 +52,7 @@ function _M.execute(conf)
 
   if conf.send_timeout and math.random() <= conf.send_timeout.rate then
     ngx.log(ngx.ERR, "mock send timeout")
+    ngx.header["connection"] = "close"
     ngx.ctx.balancer_address.send_timeout = 1
   end
 
