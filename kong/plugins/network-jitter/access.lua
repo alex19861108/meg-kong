@@ -47,9 +47,8 @@ function _M.execute(conf)
   math.random()
   if conf.connect_timeout and math.random() <= conf.connect_timeout.rate then
     ngx.log(ngx.ERR, "mock connect timeout")
-    ngx.header["Connection"] = ""
+    --ngx.header["Connection"] = ""
     ngx.ctx.balancer_address.connect_timeout = 1
-    sleep(4000)
   end
 
   if conf.send_timeout and math.random() <= conf.send_timeout.rate then
