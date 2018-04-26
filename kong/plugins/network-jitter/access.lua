@@ -45,6 +45,7 @@ local _M = {}
 function _M.execute(conf)
   math.randomseed(os.time())
   math.random()
+
   if conf.connect_timeout and math.random() <= conf.connect_timeout.rate then
     ngx.log(ngx.ERR, "mock connect timeout")
     --ngx.header["Connection"] = ""

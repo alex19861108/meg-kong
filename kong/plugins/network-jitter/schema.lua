@@ -2,6 +2,11 @@ local Errors = require "kong.dao.errors"
 
 return {
   fields = {
+    --keep_alive = {
+    --  required = true,
+    --  type = "boolean",
+    --  default = true
+    --},
     connect_timeout = {
       type = "table",
       schema = {
